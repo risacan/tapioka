@@ -16,32 +16,33 @@ module Tapioka
 
     post "/esa-webhook" do
       request_body =  request.body.read
-      Tapioka::Esa.new(request_body).update_post
+      TapiokaEsa.new(request_body).update_post
     end
   end
+end
 
-  class Esa
-    def initialize(request_body)
-      @body = JSON.parse(request_body)
-    end
 
-    def update_post
-      client.update_post(number, category: "Users/#{name}")
-    end
+class TapiokaEsa
+  def initialize(request_body)
+    @body = JSON.parse(request_body)
+  end
 
-    private
+  def update_post
+    client.update_post(number, category: "Users/#{name}")
+  end
 
-    def client
-      @client ||=  Esa::Client.new(access_token: ENV['ESA_API_TOKEN'], current_team: ENV['TEAM'])
-    end
+  private
 
-    def number
-      @body["post"]["number"]
-    end
+  def client
+    @client ||=  Esa::Client.new(access_token: ENV['ESA_API_TOKEN'], current_team: ENV['TEAM'])
+  end
 
-    def name
-      @body["user"]["screen_name"]
-    end
+  def number
+    @body["post"]["number"]
+  end
+
+  def name
+    @body["user"]["screen_name"]
   end
 end
 
