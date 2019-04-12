@@ -15,14 +15,14 @@ module Tapioka
     end
 
     post "/esa-webhook" do
-      request_body = JSON.parse(request.body.read)
+      request_body =  request.body.read
       Tapioka::Esa.new(request_body).update_post
     end
   end
 
   class Esa
     def initialize(request_body)
-      @body = request_body
+      @body = JSON.parse(request_body)
     end
 
     def update_post
