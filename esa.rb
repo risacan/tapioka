@@ -31,7 +31,10 @@ class TapiokaEsa
 
   def update_post
     return unless content.fetch("name").match(/readme/i).nil?
-    client.update_post(@number, category: "Users/#{@name}") unless has_category?
+    return if has_category?
+
+    client.update_post(@number, category: "Users/#{@name}")
+    notify_via_comment
   end
 
   private
@@ -49,6 +52,14 @@ class TapiokaEsa
     return false if category.nil?
 
     true
+  end
+
+  def notify_via_comment
+    client.create_comment(@number, body_md: body_md)
+  end
+
+  def body_md
+    "@#{@name} カテゴリを移動してね!"
   end
 end
 
