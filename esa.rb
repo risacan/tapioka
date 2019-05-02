@@ -30,6 +30,7 @@ class TapiokaEsa
   end
 
   def update_post
+    return if content.fetch("name") == "README.md"
     client.update_post(@number, category: "Users/#{@name}") unless has_category?
   end
 
