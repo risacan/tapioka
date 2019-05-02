@@ -30,7 +30,7 @@ class TapiokaEsa
   end
 
   def update_post
-    return if content.fetch("name") ~= /readme/i
+    return unless content.fetch("name").match(/readme/i).nil?
     client.update_post(@number, category: "Users/#{@name}") unless has_category?
   end
 
@@ -41,8 +41,7 @@ class TapiokaEsa
   end
 
   def content
-    response = client.post(@number)
-    response.body
+    @response ||= client.post(@number).body
   end
 
   def has_category?
