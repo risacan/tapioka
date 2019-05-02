@@ -28,21 +28,33 @@ class TapiokaEsa
   end
 
   def update_post
-    client.update_post(number, category: "Users/#{name}")
+    client.update_post(number, category: "Users/#{name}") unless has_category?
   end
 
   private
 
   def client
-    @client ||=  Esa::Client.new(access_token: ENV['ESA_API_TOKEN'], current_team: ENV['TEAM'])
+    @client ||= Esa::Client.new(access_token: ENV['ESA_API_TOKEN'], current_team: ENV['TEAM'])
   end
 
   def number
-    @body["post"]["number"]
+    @body.fetch('post').fetch('number')
   end
 
   def name
-    @body["user"]["screen_name"]
+    @body.fetch('user').fetch('screen_name')
+  end
+
+  def content(number)
+    response = client.post(number)
+    response.body
+  end
+
+  def has_category?
+    category = content.fetch('category')
+    return false if category.blank?
+
+    true
   end
 end
 
