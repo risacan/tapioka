@@ -29,11 +29,13 @@ class TapiokaEsa
     @name =  @body.fetch('user').fetch('screen_name')
   end
 
+  attr_reader :body, :number, :screen_name
+
   def update_post
     return unless content.fetch("name").match(/readme/i).nil?
     return if has_category?
 
-    client.update_post(@number, category: "Users/#{@name}")
+    client.update_post(number, category: "Users/#{name}")
     notify_via_comment
   end
 
@@ -44,7 +46,7 @@ class TapiokaEsa
   end
 
   def content
-    @response ||= client.post(@number).body
+    @content ||= client.post(number).body
   end
 
   def has_category?
@@ -55,11 +57,11 @@ class TapiokaEsa
   end
 
   def notify_via_comment
-    client.create_comment(@number, body_md: body_md)
+    client.create_comment(number, body_md: body_md)
   end
 
   def body_md
-    "@#{@name} カテゴリを移動してね!"
+    "@#{name} カテゴリを移動してね!"
   end
 end
 
