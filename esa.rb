@@ -26,7 +26,7 @@ class TapiokaEsa
   def initialize(request_body)
     @body = JSON.parse(request_body)
     @number = @body.fetch('post').fetch('number')
-    @name =  @body.fetch('user').fetch('screen_name')
+    @screen_name =  @body.fetch('user').fetch('screen_name')
   end
 
   attr_reader :body, :number, :screen_name
@@ -35,7 +35,7 @@ class TapiokaEsa
     return unless content.fetch("name").match(/readme/i).nil?
     return if has_category?
 
-    client.update_post(number, category: "Users/#{name}")
+    client.update_post(number, category: "Users/#{screen_name}")
     notify_via_comment
   end
 
@@ -61,7 +61,7 @@ class TapiokaEsa
   end
 
   def body_md
-    "@#{name} カテゴリを移動してね!"
+    "@#{screen_name} カテゴリを移動してね!"
   end
 end
 
