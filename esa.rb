@@ -45,7 +45,7 @@ class TapiokaEsa
   end
 
   def has_category?
-    category = (@number).fetch('category')
+    category = content.fetch('category')
     return false if category.blank?
 
     true
